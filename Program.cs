@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DATA_TYPES
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +12,7 @@ namespace DataTypes
     {
         static void Main(string[] args)
         {
+#if DATA_TYPES
             Console.WriteLine($"Byte:\n Name: {typeof(byte)}, Size: {sizeof(byte)}, Range: {byte.MinValue}...{byte.MaxValue}");
             Console.WriteLine($"SByte:\n Name: {typeof(sbyte)}, Size: {sizeof(sbyte)}, Range: {sbyte.MinValue}...{sbyte.MaxValue}");
             Console.WriteLine($"Short:\n Name: {typeof(short)}, Size: {sizeof(short)}, Range: {short.MinValue}...{short.MaxValue}");
@@ -22,7 +25,9 @@ namespace DataTypes
             Console.WriteLine($"Double:\n Name: {typeof(double)}, Size: {sizeof(double)}, Range: {double.MinValue}...{double.MaxValue}");
             Console.WriteLine($"Deciminal:\n Name: {typeof(decimal)}, Size: {sizeof(decimal)}, Range: {decimal.MinValue}...{decimal.MaxValue}");
             Console.WriteLine($"Bool:\n Name: {typeof(bool)}, Size: {sizeof(bool)}, Range: {bool.TrueString}...{bool.FalseString}");
-            Console.WriteLine($"Char:\n Name: {typeof(char)}, Size: {sizeof(char)}, Range: {((ushort)char.MinValue)}...{((ushort)char.MaxValue)}");
+            Console.WriteLine($"Char:\n Name: {typeof(char)}, Size: {sizeof(char)}, Range: {((ushort)char.MinValue)}...{((ushort)char.MaxValue)}"); 
+#endif
+
         }
     }
 }
