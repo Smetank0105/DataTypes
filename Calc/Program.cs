@@ -9,30 +9,39 @@ namespace Calc
 	class Program
 	{	
 		static char[] operations = new char[] { '+', '-', '*', '/' };
-		static char[] digits = "0123456789. ".ToCharArray();
+		static char[] digits = "n0123456789. ".ToCharArray();				//n перед числом - обозначение отрицательного значения
 
 		static void Main(string[] args)
 		{
 			Console.Write("Введите арифметическое выражение: ");
-			string input = "(1 + (22 + 33) / 5 + 44 / (2 + 6) * 8) * 3";//"(1 + (22 + 33) / 5 - 44 / (2 + 6) * 8) * 3";
-			input = "("+input+")";
+			string input = "(1 + (22 + 33) / 5 - 44 / (2 + 6) * 8) * 3";	//Console.ReadLine();
+			input = "("+input+")";											//помещаем всё выражение в (), что бы условия цикла сработали для всего выражения
 			Console.WriteLine(input);
+			
+			double result = 0.0;											//итоговый результат вычисления
 
-			while (input.Contains('('))
+			while (input.Contains('('))										//цикл работает, пока в изначальном выражении есть "("
 			{
-				int foundS1 = input.LastIndexOf("(");
-				int foundS2 = input.IndexOf(")",foundS1+1);
+				int foundS1 = input.LastIndexOf("(");						//индекс последнией открывающей скобки "(" в выражении
+				int foundS2 = input.IndexOf(")",foundS1+1);					//индекс первой закрывающей скобки ")" после foundS1 в выражении
 
-				string expression = input.Substring(foundS1+1, foundS2-foundS1-1);
+				string expression = input.Substring(foundS1+1, foundS2-foundS1-1);	//выделяем в отдельную подстроку содержимое найденых скобок
 				//Console.WriteLine(expression);
 
 				string[] s_values = expression.Split(Program.operations);
 				double[] values = new double[s_values.Length];
+
 				for (int i = 0; i < values.Length; i++)
 				{
-					values[i] = Convert.ToDouble(s_values[i]);
+					//Console.WriteLine(s_values[i]);
+					if (s_values[i].Contains("n"))							//если s_values[i] содержит симлов отрицательного значения "n"
+					{
+						s_values[i]=s_values[i].Remove(0,1);				//удаляем из s_values[i] первый символ "n"
+						values[i] = 0 - Convert.ToDouble(s_values[i]);		//конвертируем оставшуюся строку в double и делаем отрицательным
+					}
+					else values[i] = Convert.ToDouble(s_values[i]);			//иначе конвертируем s_values[i] в double
 				}
-				Console.WriteLine();
+
 				string[] operations = expression.Split(Program.digits);
 				operations = operations.Where(o => o != "").ToArray();
 
@@ -76,11 +85,18 @@ namespace Calc
 							}
 						}
 				}
-				input = input.Remove(foundS1,foundS2-foundS1+1);
-				input = input.Insert(foundS1,Convert.ToString(values[0]));
-				//Console.WriteLine($"Ответ: { values[0]}");
-				Console.WriteLine(input);
+
+				input = input.Remove(foundS1,foundS2-foundS1+1);			//удаляем из изначального выражения вычисленную в скобках подстроку
+				if (values[0] < 0)											//если результат вычисления < 0
+				{
+					input = input.Insert(foundS1,"n" + Convert.ToString(-values[0]));	//вставляем в изначальное выражение, на место удаленной подстроки, вычисленный результат с добавленным символом "n"
+				}
+				else input = input.Insert(foundS1,Convert.ToString(values[0]));			//иначе вставляем в изначальное выражение, на место удаленной подстроки, вычисленный результат
+				//Console.WriteLine(values[0]);
+				//Console.WriteLine(input);
+				result = values[0];
 			}
+			Console.WriteLine($"Ответ: {result}");
 		}
 	}
 }
